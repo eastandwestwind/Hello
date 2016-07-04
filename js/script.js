@@ -1,6 +1,7 @@
 
 
-var game = new Phaser.Game(1200, 700, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create });
+
+var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create });
 
 
 
@@ -24,7 +25,9 @@ function preload() {
 function create() {
     game.stage.backgroundColor = "#ffffff";
 
-    var stick = game.add.sprite(500, 500, 'stick');
+    var stick = game.add.sprite(game.width / 2, 500, 'stick');
+
+    stick.anchor.setTo(.5, 0);
 
     //  Here we add a new animation called 'walk'
     //  Because we didn't give any other parameters it's going to make an animation from all available frames in the 'mummy' sprite sheet
@@ -58,7 +61,6 @@ function create() {
         case 37: //left arrow
 
           console.log('left');
-          stick.anchor.setTo(.5, 0);
           stick.scale.x = -1;
           stick.animations.play('walk', 7, true);
           break;
