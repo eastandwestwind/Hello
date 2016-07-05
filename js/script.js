@@ -32,7 +32,7 @@ function create() {
 
     //  Enable p2 physics
     game.physics.startSystem(Phaser.Physics.P2JS);
-    game.physics.p2.gravity.y = 350;
+    game.physics.p2.gravity.y = 500;
     game.physics.p2.world.defaultContactMaterial.friction = 0.3;
     game.physics.p2.world.setGlobalStiffness(1e5);
 
@@ -40,7 +40,7 @@ function create() {
     game.physics.p2.enable(stick);
     stick.body.fixedRotation = true;
     stick.body.damping = 0.5;
-    stick.body.setRectangle(58,120,0,0,0);
+    stick.body.setRectangle(58,120,0,-5,0);
 
     stick.animations.add('walk',[4,5,6,7,8]);
     stick.animations.add('stand',[2,3]);
@@ -55,13 +55,40 @@ function create() {
     game.physics.p2.setWorldMaterial(worldMaterial, true, true, true, true);
 
     //  A stack of boxes
-    for (var i = 1; i < 4; i++)
+    for (var i = 1; i < 7; i++)
     {
-        var box1 = game.add.sprite(300, 645 - (95 * i), 'box1');
+        var box1 = game.add.sprite(30, 645 - (95 * i), 'box1');
         game.physics.p2.enable(box1);
         box1.body.mass = 6;
         // box.body.static = true;
         box1.body.setMaterial(boxMaterial);
+    }
+    // another stack
+    for (var i = 1; i < 3; i++)
+    {
+        var box2 = game.add.sprite(window.innerWidth-130, 645 - (95 * i), 'box2');
+        game.physics.p2.enable(box2);
+        box2.body.mass = 10;
+        // box.body.static = true;
+        box2.body.setMaterial(boxMaterial);
+    }
+    // another stack!
+    for (var i = 1; i < 5; i++)
+    {
+        var box2 = game.add.sprite(window.innerWidth-80, 645 - (95 * i), 'box2');
+        game.physics.p2.enable(box2);
+        box2.body.mass = 10;
+        // box.body.static = true;
+        box2.body.setMaterial(boxMaterial);
+    }
+    // another stack!
+    for (var i = 1; i < 8; i++)
+    {
+        var box2 = game.add.sprite(window.innerWidth-30, 645 - (95 * i), 'box2');
+        game.physics.p2.enable(box2);
+        box2.body.mass = 10;
+        // box.body.static = true;
+        box2.body.setMaterial(boxMaterial);
     }
 
     //  Here is the contact material. It's a combination of 2 materials, so whenever shapes with
@@ -92,21 +119,35 @@ function update() {
     {
       if (true == touchingDown() && game.time.now > jumpTimer + 75)
        {
-           stick.scale.x = -1;
            stick.body.moveLeft(160);
            stick.animations.play('walk', 9, true);
-           facing = 'left';
        }
+      else {
+        if (stick.body.velocity.x < 80)
+        {
+           stick.body.moveLeft(80);
+        }
+        stick.animations.play('jump', 4, true);
+       }
+       facing = 'left';
+       stick.scale.x = -1;
     }
     else if (cursors.right.isDown)
     {
       if (true == touchingDown() && game.time.now > jumpTimer + 75)
         {
-            stick.scale.x = 1;
             stick.body.moveRight(160);
             stick.animations.play('walk', 9, true);
-            facing = 'right';
         }
+      else {
+        if (stick.body.velocity.x < 80)
+        {
+          stick.body.moveRight(80);
+        }
+        stick.animations.play('jump', 4, true);
+      }
+      facing = 'right'
+      stick.scale.x = 1;
     }
     else
     {
@@ -125,17 +166,19 @@ function update() {
         {
           stick.scale.x = -1;
           stick.animations.play('jump', 4, true);
+          stick.body.moveLeft(160);
         }
       else if ('right' == facing)
         {
           stick.scale.x = 1;
           stick.animations.play('jump', 4, true);
+          stick.body.moveRight(160);
         }
       else
         {
           stick.scale.x = 1;
       }
-      stick.body.moveUp(250);
+      stick.body.moveUp(400);
       jumpTimer = game.time.now;
     }
 }
